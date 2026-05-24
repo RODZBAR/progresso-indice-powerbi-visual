@@ -1,0 +1,22 @@
+{
+  "name": "progressoindicebarras",
+  "version": "1.0.0",
+  "description": "Visual personalizado do Power BI: cartao de progresso por barras.",
+  "scripts": {
+    "pbiviz": "pbiviz",
+    "start": "pbiviz start",
+    "package": "pbiviz package",
+    "lint": "eslint src --ext .ts"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "powerbi-visuals-api": "5.9.0",
+    "powerbi-visuals-utils-formattingmodel": "6.0.4"
+  },
+  "devDependencies": {
+    "powerbi-visuals-tools": "5.6.0",
+    "typescript": "5.6.3",
+    "less": "4.2.0"
+  }
+}

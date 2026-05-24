@@ -1,0 +1,124 @@
+{
+  "privileges": [],
+  "dataRoles": [
+    { "displayName": "Campo 1 - Resultado (topo)", "name": "resultadoTopo", "kind": "Measure" },
+    { "displayName": "Campo 1 - Meta (topo)", "name": "metaTopo", "kind": "Measure" },
+    { "displayName": "Campo 2 - Peso", "name": "peso", "kind": "Measure" },
+    { "displayName": "Posicao (data)", "name": "posicao", "kind": "GroupingOrMeasure" },
+    { "displayName": "Campo 3 - Resultado (barra)", "name": "resultadoBarra", "kind": "Measure" },
+    { "displayName": "Campo 3 - Atingimento %", "name": "atingimento", "kind": "Measure" },
+    { "displayName": "Campo 4 - Progresso da barra %", "name": "progresso", "kind": "Measure" },
+    { "displayName": "Campo 5 - Meta (barra)", "name": "metaBarra", "kind": "Measure" },
+    { "displayName": "Dicas de ferramenta (tooltips)", "name": "tooltips", "kind": "Measure" }
+  ],
+  "dataViewMappings": [
+    {
+      "table": {
+        "rows": {
+          "select": [
+            { "bind": { "to": "resultadoTopo" } },
+            { "bind": { "to": "metaTopo" } },
+            { "bind": { "to": "peso" } },
+            { "bind": { "to": "posicao" } },
+            { "bind": { "to": "resultadoBarra" } },
+            { "bind": { "to": "atingimento" } },
+            { "bind": { "to": "progresso" } },
+            { "bind": { "to": "metaBarra" } },
+            { "bind": { "to": "tooltips" } }
+          ]
+        }
+      }
+    }
+  ],
+  "tooltips": {
+    "supportedTypes": { "default": true, "canvas": true },
+    "roles": ["tooltips"]
+  },
+  "objects": {
+    "cartao": {
+      "properties": {
+        "corFundo": { "type": { "fill": { "solid": { "color": true } } } },
+        "raio": { "type": { "numeric": true } }
+      }
+    },
+    "topo": {
+      "properties": {
+        "fontFamily": { "type": { "formatting": { "fontFamily": true } } },
+        "fontSize": { "type": { "formatting": { "fontSize": true } } },
+        "fontBold": { "type": { "bool": true } },
+        "fontItalic": { "type": { "bool": true } },
+        "fontUnderline": { "type": { "bool": true } },
+        "cor": { "type": { "fill": { "solid": { "color": true } } } },
+        "prefixo": { "type": { "text": true } },
+        "separador": { "type": { "text": true } },
+        "sufixo": { "type": { "text": true } }
+      }
+    },
+    "peso": {
+      "properties": {
+        "rotulo": { "type": { "text": true } },
+        "fontFamily": { "type": { "formatting": { "fontFamily": true } } },
+        "fontSize": { "type": { "formatting": { "fontSize": true } } },
+        "fontBold": { "type": { "bool": true } },
+        "fontItalic": { "type": { "bool": true } },
+        "fontUnderline": { "type": { "bool": true } },
+        "cor": { "type": { "fill": { "solid": { "color": true } } } }
+      }
+    },
+    "posicao": {
+      "properties": {
+        "rotulo": { "type": { "text": true } },
+        "fontFamily": { "type": { "formatting": { "fontFamily": true } } },
+        "fontSize": { "type": { "formatting": { "fontSize": true } } },
+        "fontBold": { "type": { "bool": true } },
+        "fontItalic": { "type": { "bool": true } },
+        "fontUnderline": { "type": { "bool": true } },
+        "cor": { "type": { "fill": { "solid": { "color": true } } } }
+      }
+    },
+    "resultadoBarra": {
+      "properties": {
+        "rotulo": { "type": { "text": true } },
+        "corRotulo": { "type": { "fill": { "solid": { "color": true } } } },
+        "fontFamily": { "type": { "formatting": { "fontFamily": true } } },
+        "fontSize": { "type": { "formatting": { "fontSize": true } } },
+        "fontBold": { "type": { "bool": true } },
+        "fontItalic": { "type": { "bool": true } },
+        "fontUnderline": { "type": { "bool": true } },
+        "corValor": { "type": { "fill": { "solid": { "color": true } } } },
+        "textoMeio": { "type": { "text": true } },
+        "textoFim": { "type": { "text": true } }
+      }
+    },
+    "barra": {
+      "properties": {
+        "corAtingido": { "type": { "fill": { "solid": { "color": true } } } },
+        "corNaoAtingido": { "type": { "fill": { "solid": { "color": true } } } },
+        "corFundoBarra": { "type": { "fill": { "solid": { "color": true } } } },
+        "limite": { "type": { "numeric": true } },
+        "segmentos": { "type": { "numeric": true } },
+        "altura": { "type": { "numeric": true } }
+      }
+    },
+    "metaBarra": {
+      "properties": {
+        "rotulo": { "type": { "text": true } },
+        "corRotulo": { "type": { "fill": { "solid": { "color": true } } } },
+        "fontFamily": { "type": { "formatting": { "fontFamily": true } } },
+        "fontSize": { "type": { "formatting": { "fontSize": true } } },
+        "fontBold": { "type": { "bool": true } },
+        "fontItalic": { "type": { "bool": true } },
+        "fontUnderline": { "type": { "bool": true } },
+        "corValor": { "type": { "fill": { "solid": { "color": true } } } },
+        "sufixo": { "type": { "text": true } }
+      }
+    },
+    "numero": {
+      "properties": {
+        "casasDecimais": { "type": { "numeric": true } },
+        "fracaoPercentual": { "type": { "bool": true } },
+        "virgulaDecimal": { "type": { "bool": true } }
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+# Dependências
+node_modules/
+
+# Artefatos de build / temporários
+.tmp/
+dist/
+.api/
+webpack.statistics.prod.html
+*.log
+npm-debug.log*
+
+# Certificados de desenvolvimento do pbiviz
+*.pfx
+*.crt
+*.key
+
+# Editores / IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Configuração local da ferramenta (Claude Code)
+.claude/
+
+# Arquivos pessoais nesta pasta (não relacionados ao projeto)
+Principal.jpeg
+moca.jpeg
