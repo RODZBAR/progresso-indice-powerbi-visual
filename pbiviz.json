@@ -1,0 +1,25 @@
+{
+  "visual": {
+    "name": "progressoIndiceBarras",
+    "displayName": "Progresso Indice (Barras)",
+    "guid": "progressoIndiceBarras0A1B2C3D4E5F",
+    "visualClassName": "Visual",
+    "version": "1.0.0.0",
+    "description": "Cartao de progresso por barras (replica do visual DAX+SVG) com campos no painel de dados, formatacao configuravel (fundo, fontes, tamanhos, cores, rotulos) e suporte a tooltips.",
+    "supportUrl": "https://app.powerbi.com",
+    "gitHubUrl": "https://github.com/rodzbar/progresso-indice-powerbi-visual"
+  },
+  "apiVersion": "5.9.0",
+  "author": {
+    "name": "Rodrigo de Souza Barbosa",
+    "email": "rodzbar@outlook.com"
+  },
+  "assets": {
+    "icon": "assets/icon.png"
+  },
+  "externalJS": [],
+  "style": "style/visual.less",
+  "capabilities": "capabilities.json",
+  "dependencies": null,
+  "stringResources": []
+}
