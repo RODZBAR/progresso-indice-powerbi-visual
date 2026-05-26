@@ -154,9 +154,21 @@ class ResultadoBarraCard extends Card {
         value: " atg.",
         placeholder: " atg."
     });
+    separadorPontuacao = new formattingSettings.TextInput({
+        name: "separadorPontuacao",
+        displayName: "Separador antes da Pontuacao (Campo 6)",
+        value: " | ",
+        placeholder: " | "
+    });
+    rotuloPontuacao = new formattingSettings.TextInput({
+        name: "rotuloPontuacao",
+        displayName: "Rotulo da Pontuacao (Campo 6)",
+        value: "Pontuacao ",
+        placeholder: "Pontuacao "
+    });
     name = "resultadoBarra";
     displayName = "Campo 3 - Resultado/Atingimento (barra)";
-    slices = [this.rotulo, this.corRotulo, this.font, this.corValor, this.textoMeio, this.textoFim];
+    slices = [this.rotulo, this.corRotulo, this.font, this.corValor, this.textoMeio, this.textoFim, this.separadorPontuacao, this.rotuloPontuacao];
 }
 
 /* ------------------ Campo 4 - Barra de progresso ------------------ */
@@ -238,6 +250,36 @@ class MetaBarraCard extends Card {
     slices = [this.rotulo, this.corRotulo, this.font, this.corValor, this.sufixo];
 }
 
+/* ------------------ Campo 7 - Projecao de Pontos (abaixo da Meta) ------------------ */
+class ProjecaoCard extends Card {
+    rotulo = new formattingSettings.TextInput({
+        name: "rotulo",
+        displayName: "Rotulo (esquerda)",
+        value: "Projecao de Pontos",
+        placeholder: "Projecao de Pontos"
+    });
+    corRotulo = new formattingSettings.ColorPicker({
+        name: "corRotulo",
+        displayName: "Cor do rotulo",
+        value: { value: "#A0A0A0" }
+    });
+    font = controleFonte(true, 32);
+    corValor = new formattingSettings.ColorPicker({
+        name: "corValor",
+        displayName: "Cor do valor",
+        value: { value: "#FFFFFF" }
+    });
+    sufixo = new formattingSettings.TextInput({
+        name: "sufixo",
+        displayName: "Sufixo",
+        value: "",
+        placeholder: ""
+    });
+    name = "projecao";
+    displayName = "Campo 7 - Projecao de Pontos (barra)";
+    slices = [this.rotulo, this.corRotulo, this.font, this.corValor, this.sufixo];
+}
+
 /* ------------------ Numeros (global) ------------------ */
 class NumeroCard extends Card {
     casasDecimais = new formattingSettings.NumUpDown({
@@ -259,9 +301,23 @@ class NumeroCard extends Card {
         displayName: "Usar virgula como separador decimal",
         value: true
     });
+    casasDecimaisPontuacao = new formattingSettings.NumUpDown({
+        name: "casasDecimaisPontuacao",
+        displayName: "Casas decimais (Pontuacao - Campos 6 e 7)",
+        value: 0,
+        options: {
+            minValue: { type: ValidatorType.Min, value: 0 },
+            maxValue: { type: ValidatorType.Max, value: 6 }
+        }
+    });
+    separadorMilharPontuacao = new formattingSettings.ToggleSwitch({
+        name: "separadorMilharPontuacao",
+        displayName: "Separador de milhar na Pontuacao (ex.: 1.250)",
+        value: true
+    });
     name = "numero";
     displayName = "Numeros (formatacao)";
-    slices = [this.casasDecimais, this.fracaoPercentual, this.virgulaDecimal];
+    slices = [this.casasDecimais, this.fracaoPercentual, this.virgulaDecimal, this.casasDecimaisPontuacao, this.separadorMilharPontuacao];
 }
 
 export class VisualFormattingSettingsModel extends Model {
@@ -272,6 +328,7 @@ export class VisualFormattingSettingsModel extends Model {
     resultadoBarra = new ResultadoBarraCard();
     barra = new BarraCard();
     metaBarra = new MetaBarraCard();
+    projecao = new ProjecaoCard();
     numero = new NumeroCard();
 
     cards = [
@@ -282,6 +339,7 @@ export class VisualFormattingSettingsModel extends Model {
         this.resultadoBarra,
         this.barra,
         this.metaBarra,
+        this.projecao,
         this.numero
     ];
 }

@@ -4,7 +4,7 @@
 ![API](https://img.shields.io/badge/Visuals%20API-5.9.0-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?logo=typescript&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-1.0.0-informational)
+![Version](https://img.shields.io/badge/version-1.1.0-informational)
 
 Cartão de **progresso por barras** para Power BI, distribuído como **visual personalizado importável** (`.pbiviz`). É a reconstrução nativa de um cartão que originalmente era gerado por **DAX + SVG** dentro de um componente *HTML Content*.
 
@@ -50,17 +50,18 @@ O objetivo deste visual é **manter 100% de fidelidade ao layout original**, mas
 ## Anatomia do visual
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│  253,12/253,12 pts                            Peso: 16,87%    │  ← Campo 1 (esq.) / Campo 2 (dir.)
-│  Posição: 30/04/2026                                          │  ← Posição
-│                                                               │
-│  Resultado                       253,12 pts | 100,00% atg.    │  ← rótulo / Campo 3
-│  ▰▰▰▰▰▰   ▰▰▰▰▰▰   ▰▰▰▰▰▰   ▰▰▰▰▰▰                            │  ← Campo 4 (barra)
-│  Meta                                          253,12 pts     │  ← rótulo / Campo 5
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│  14,00/253,12 pts                                       Peso: 16,87%    │  ← Campo 1 (esq.) / Campo 2 (dir.)
+│  Posição: 30/04/2026                                                    │  ← Posição
+│                                                                         │
+│  Resultado            5,83 pts | 105,42% atg. | Pontuação 1.250         │  ← Campo 3 + Campo 6
+│  ▰▰▰▰▰▰   ▰▰▰▰▰▰   ▰▰▰▰▰▰   ▰▰▰▰▰▰                                      │  ← Campo 4 (barra)
+│  Meta                                                       5,53 pts    │  ← rótulo / Campo 5
+│  Projeção de Pontos                                            1.500    │  ← Campo 7 (novo na v1.1.0)
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
-O visual é desenhado em um `viewBox` fixo de `817 × 321`, com `preserveAspectRatio`, então escala proporcionalmente ao tamanho do contêiner mantendo o layout.
+O visual é desenhado em um `viewBox` fixo de `817 × 321`, com `preserveAspectRatio`, então escala proporcionalmente ao tamanho do contêiner mantendo o layout — inclusive com os campos da v1.1.0.
 
 ---
 
@@ -78,9 +79,13 @@ Cada valor distinto do cartão é um campo independente, aceitando uma medida (o
 | Campo 3 — Atingimento % | `atingimento` | Acima da barra (`... Y% atg.`) |
 | Campo 4 — Progresso da barra % | `progresso` | Preenchimento dos segmentos |
 | Campo 5 — Meta (barra) | `metaBarra` | Abaixo da barra, à direita |
+| **Campo 6 — Pontuação Régua** *(v1.1.0)* | `pontuacaoRegua` | Linha Resultado, ao final (`... \| Pontuação 1.250`) |
+| **Campo 7 — Pontuação Régua Projeção** *(v1.1.0)* | `pontuacaoReguaProjecao` | Linha sob a Meta (`Projeção de Pontos    1.500`) |
 | Dicas de ferramenta | `tooltips` | Tooltip ao passar o mouse |
 
 > **Percentuais**: por padrão o visual interpreta `peso`, `atingimento` e `progresso` como **fração** (ex.: `0,1687` → `16,87%`), igual ao DAX original. Caso suas medidas já venham multiplicadas por 100, desligue *"Percentuais como fração (0 a 1)"* no cartão **Números**.
+>
+> **Pontuação**: os Campos 6 e 7 são formatados como inteiro com **separador de milhar** (`.`) por padrão — ex.: `1250` → `1.250`. Casas decimais e o separador de milhar são configuráveis no cartão **Números**.
 
 ---
 
@@ -94,10 +99,11 @@ Todas no painel nativo de Formatação:
 | **Campo 1 — Resultado/Meta** | Fonte, tamanho, negrito, cor, prefixo (rótulo), separador, sufixo |
 | **Campo 2 — Peso** | Rótulo, fonte, tamanho, negrito, cor |
 | **Posição (data)** | Rótulo, fonte, tamanho, negrito, cor |
-| **Campo 3 — Resultado/Atingimento** | Rótulo + cor do rótulo, fonte/tamanho/negrito, cor do valor, textos intermediário e final |
+| **Campo 3 — Resultado/Atingimento** | Rótulo + cor do rótulo, fonte/tamanho/negrito, cor do valor, textos intermediário e final, **separador e rótulo da Pontuação** *(v1.1.0)* |
 | **Campo 4 — Barra de progresso** | Cor (atingido), cor (abaixo da meta), cor de fundo da barra, limite (%), nº de segmentos, altura |
 | **Campo 5 — Meta** | Rótulo + cor do rótulo, fonte/tamanho/negrito, cor do valor, sufixo |
-| **Números (formatação)** | Casas decimais, vírgula como separador decimal, percentuais como fração |
+| **Campo 7 — Projeção de Pontos** *(v1.1.0)* | Rótulo + cor do rótulo, fonte/tamanho/negrito, cor do valor, sufixo |
+| **Números (formatação)** | Casas decimais, vírgula como separador decimal, percentuais como fração, **casas decimais da Pontuação, separador de milhar da Pontuação** *(v1.1.0)* |
 
 ---
 
@@ -127,9 +133,11 @@ A **cor** é dinâmica: se `p >= limite/100`, usa a *cor de atingido* (verde `#5
 | `_Pontos` (`Realizado`) | Resultado da barra | Campo 3 — Resultado (barra) |
 | `_Percentual` (`_Pontos / _MetaTexto`) | Atingimento | Campo 3 — Atingimento % **e** Campo 4 — Progresso |
 | `_MetaTexto` (`Meta_Projecao`) | Meta projetada | Campo 5 — Meta (barra) |
+| Medida nova (Pontuação Régua) *(v1.1.0)* | Pontuação acumulada | Campo 6 — Pontuação Régua |
+| Medida nova (Pontuação Régua Projeção) *(v1.1.0)* | Projeção de pontos | Campo 7 — Pontuação Régua Projeção |
 | `_CorBarra` (verde/vermelho) | Cor condicional | Cartão **Barra** (cores + limite) |
 
-> Agora cada uma dessas variáveis vira uma **medida simples** arrastada para o campo correspondente — sem precisar montar a string SVG no DAX.
+> Cada uma dessas variáveis vira uma **medida simples** arrastada para o campo correspondente — sem precisar montar a string SVG no DAX.
 
 ---
 
@@ -196,7 +204,7 @@ npm start   # npx pbiviz start
 ## Instalação no Power BI Desktop
 
 1. Painel **Visualizações → ⋯ (Obter mais visuais) → Importar um visual de um arquivo**.
-2. Selecione o arquivo `.pbiviz` gerado em `dist/`.
+2. Selecione o arquivo `.pbiviz` (baixe a versão mais recente na [aba Releases](../../releases) deste repositório).
 3. Adicione o visual ao relatório e arraste suas medidas para os campos correspondentes.
 4. Ajuste a aparência no painel de **Formatação**.
 

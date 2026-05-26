@@ -13,7 +13,7 @@ import VisualTooltipDataItem = powerbi.extensibility.VisualTooltipDataItem;
 
 const SVGNS = "http://www.w3.org/2000/svg";
 const VIEW_W = 817;
-const VIEW_H = 321;
+const VIEW_H = 321; // altura unica - a linha Projecao (Campo 7) cabe no respiro original abaixo da Meta
 const BAR_TOTAL_W = 737;
 const BAR_GAP = 19;
 
@@ -55,6 +55,17 @@ function fmtPct(v: any, dec: number, virgula: boolean, fracao: boolean): string 
         s = s.replace(".", ",");
     }
     return s + "%";
+}
+
+function fmtPontuacao(v: any, dec: number, milhar: boolean): string {
+    if (v === null || v === undefined || v === "" || isNaN(Number(v))) {
+        return "";
+    }
+    return Number(v).toLocaleString("pt-BR", {
+        minimumFractionDigits: dec,
+        maximumFractionDigits: dec,
+        useGrouping: milhar
+    });
 }
 
 function fontAttrs(font: any, forcarPeso?: string): { [k: string]: string | number } {
@@ -157,6 +168,13 @@ export class Visual implements IVisual {
         const virgula = s.numero.virgulaDecimal.value;
         const fracao = s.numero.fracaoPercentual.value;
 
+        // viewBox permanece 817x321 sempre - a Projecao (Campo 7) encaixa no espaco
+        // sob a Meta sem mudar a proporcao do cartao (evita encolhimento por aspect-ratio)
+        const table = dataView && dataView.table;
+        const columnsAll = table && table.columns ? table.columns : [];
+        const temProjecao = columnsAll.findIndex(c => c.roles && (c.roles as any).pontuacaoReguaProjecao) >= 0;
+        const temPontuacaoRegua = columnsAll.findIndex(c => c.roles && (c.roles as any).pontuacaoRegua) >= 0;
+
         // Fundo do cartao
         this.svg.appendChild(el("rect", {
             x: 0, y: 0, width: VIEW_W, height: VIEW_H,
@@ -164,7 +182,6 @@ export class Visual implements IVisual {
             fill: s.cartao.corFundo.value.value
         }));
 
-        const table = dataView && dataView.table;
         if (!table || !table.columns || !table.columns.length) {
             this.tooltipItems = [];
             this.svg.appendChild(txt({
@@ -186,6 +203,11 @@ export class Visual implements IVisual {
         const atingimento = this.getVal(columns, row, "atingimento");
         const progresso = this.getVal(columns, row, "progresso");
         const metaBarra = this.getVal(columns, row, "metaBarra");
+        const pontuacaoRegua = this.getVal(columns, row, "pontuacaoRegua");
+        const pontuacaoReguaProjecao = this.getVal(columns, row, "pontuacaoReguaProjecao");
+
+        const decPont = s.numero.casasDecimaisPontuacao.value;
+        const milharPont = s.numero.separadorMilharPontuacao.value;
 
         // Tooltips
         this.tooltipItems = columns
@@ -227,11 +249,16 @@ export class Visual implements IVisual {
             fill: s.resultadoBarra.corRotulo.value.value
         }, s.resultadoBarra.rotulo.value));
 
-        // Campo 3 - valor "X pts | Y% atg." (direita)
-        const valBarra = fmtNum(resultadoBarra, dec, virgula)
+        // Campo 3 - valor "X pts | Y% atg."  (+ Campo 6 "| Pontuacao 1.250" quando presente)
+        let valBarra = fmtNum(resultadoBarra, dec, virgula)
             + s.resultadoBarra.textoMeio.value
             + fmtPct(atingimento, dec, virgula, fracao)
             + s.resultadoBarra.textoFim.value;
+        if (temPontuacaoRegua) {
+            valBarra += s.resultadoBarra.separadorPontuacao.value
+                + s.resultadoBarra.rotuloPontuacao.value
+                + fmtPontuacao(pontuacaoRegua, decPont, milharPont);
+        }
         g.appendChild(txt({
             x: 737, y: -35, ...fontAttrs(s.resultadoBarra.font),
             fill: s.resultadoBarra.corValor.value.value, "text-anchor": "end"
@@ -281,6 +308,22 @@ export class Visual implements IVisual {
             x: 737, y: 55, ...fontAttrs(s.metaBarra.font),
             fill: s.metaBarra.corValor.value.value, "text-anchor": "end"
         }, metaTexto));
+
+        // Campo 7 - Projecao de Pontos (nova linha abaixo da Meta) - so renderiza se o campo estiver bind
+        // y=100 no grupo (= 280 absoluto): cabe na viewBox original aproveitando o respiro sob a Meta
+        if (temProjecao) {
+            // rotulo "Projecao de Pontos" (esquerda)
+            g.appendChild(txt({
+                x: 0, y: 100, ...fontAttrs(s.projecao.font, "400"),
+                fill: s.projecao.corRotulo.value.value
+            }, s.projecao.rotulo.value));
+            // valor (direita)
+            const projecaoTexto = fmtPontuacao(pontuacaoReguaProjecao, decPont, milharPont) + s.projecao.sufixo.value;
+            g.appendChild(txt({
+                x: 737, y: 100, ...fontAttrs(s.projecao.font),
+                fill: s.projecao.corValor.value.value, "text-anchor": "end"
+            }, projecaoTexto));
+        }
 
         this.svg.appendChild(g);
     }

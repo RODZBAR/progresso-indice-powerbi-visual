@@ -9,6 +9,8 @@
     { "displayName": "Campo 3 - Atingimento %", "name": "atingimento", "kind": "Measure" },
     { "displayName": "Campo 4 - Progresso da barra %", "name": "progresso", "kind": "Measure" },
     { "displayName": "Campo 5 - Meta (barra)", "name": "metaBarra", "kind": "Measure" },
+    { "displayName": "Campo 6 - Pontuacao Regua", "name": "pontuacaoRegua", "kind": "Measure" },
+    { "displayName": "Campo 7 - Pontuacao Regua Projecao", "name": "pontuacaoReguaProjecao", "kind": "Measure" },
     { "displayName": "Dicas de ferramenta (tooltips)", "name": "tooltips", "kind": "Measure" }
   ],
   "dataViewMappings": [
@@ -24,6 +26,8 @@
             { "bind": { "to": "atingimento" } },
             { "bind": { "to": "progresso" } },
             { "bind": { "to": "metaBarra" } },
+            { "bind": { "to": "pontuacaoRegua" } },
+            { "bind": { "to": "pontuacaoReguaProjecao" } },
             { "bind": { "to": "tooltips" } }
           ]
         }
@@ -87,7 +91,9 @@
         "fontUnderline": { "type": { "bool": true } },
         "corValor": { "type": { "fill": { "solid": { "color": true } } } },
         "textoMeio": { "type": { "text": true } },
-        "textoFim": { "type": { "text": true } }
+        "textoFim": { "type": { "text": true } },
+        "separadorPontuacao": { "type": { "text": true } },
+        "rotuloPontuacao": { "type": { "text": true } }
       }
     },
     "barra": {
@@ -113,11 +119,26 @@
         "sufixo": { "type": { "text": true } }
       }
     },
+    "projecao": {
+      "properties": {
+        "rotulo": { "type": { "text": true } },
+        "corRotulo": { "type": { "fill": { "solid": { "color": true } } } },
+        "fontFamily": { "type": { "formatting": { "fontFamily": true } } },
+        "fontSize": { "type": { "formatting": { "fontSize": true } } },
+        "fontBold": { "type": { "bool": true } },
+        "fontItalic": { "type": { "bool": true } },
+        "fontUnderline": { "type": { "bool": true } },
+        "corValor": { "type": { "fill": { "solid": { "color": true } } } },
+        "sufixo": { "type": { "text": true } }
+      }
+    },
     "numero": {
       "properties": {
         "casasDecimais": { "type": { "numeric": true } },
         "fracaoPercentual": { "type": { "bool": true } },
-        "virgulaDecimal": { "type": { "bool": true } }
+        "virgulaDecimal": { "type": { "bool": true } },
+        "casasDecimaisPontuacao": { "type": { "numeric": true } },
+        "separadorMilharPontuacao": { "type": { "bool": true } }
       }
     }
   }
